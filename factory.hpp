@@ -4,6 +4,8 @@
 #include "base.hpp"
 #include "op.hpp"
 #include <cstring>
+#include <iostream>
+using namespace std;
 
 class Factory{
   private:
@@ -33,7 +35,7 @@ class Factory{
     }
     
     bool validOp(char* currOp){
-      int length = strlen(currOp)
+      int length = strlen(currOp);
       if(length == 1){
         if(currOp[0] != '+' && currOp[0] != '-' && currOp[0] != '/' && currOp[0] != '*'){
           return false;
@@ -48,6 +50,53 @@ class Factory{
   public:
     Factory(){}
     
+    Base* parse(char** expression, int length){
+      Base* leftValue = nullptr;
+      Base* rightValue = nullptr;
+      char currOp;
+      bool endingOp = false;
+      for (int i = 1; i < length; i++){
+        char * ptrOp;
+        int convValue = (int) strtol(expression[i], &ptrOp, 10);
+
+        if(ptrOp != expression[i]){
+          if((*ptrOp) && (*ptrOp <= '0' || *ptrOp >= '9')){
+            return nullptr;
+          }
+          if(!leftValue){
+            if(rightValue){
+              return nullptr;
+            }
+            leftValue = new Op(convValue);
+            endingOp = false;
+          }
+          else{
+            rightValue = new Op(convValue);
+            leftValue = createExpression(leftValue, rightValue, currOp);
+            currOp = NULL;
+            endingOp = false;
+          }    
+        }
+        else if(!validOp(expression[i])){
+          return nullptr;
+        }
+        else{
+          if(strlen(expression[i]) == 2){
+            currOp = '^';
+            
+          }
+          else{ 
+            currOp = expression[i][0];
+          }
+          endingOp = false; 
+        }   
+      }
+    if(endingOp){
+      return nullptr;
+    }
+    return leftValue;
+    
+  }
 
 };
 #endif //_FACTORY_HPP_
