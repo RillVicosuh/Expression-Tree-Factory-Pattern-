@@ -1,9 +1,8 @@
-Makefile
-CMakeFiles
-bin
 CMakeCache.txt
+CMakeFiles/
+Makefile
 calculator
 cmake_install.cmake
-lib
+lib/
 test
 
