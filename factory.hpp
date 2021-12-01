@@ -41,7 +41,7 @@ class Factory{
           return false;
         }
       }
-      else if(length >= 2){
+      else if(length == 2 && currOp[0] != '*' && currOp[1] != '*'){
         return false; 
       }
       return true;
@@ -88,7 +88,7 @@ class Factory{
           else{ 
             currOp = expression[i][0];
           }
-          endingOp = false; 
+          endingOp = true; 
         }   
       }
     if(endingOp){
